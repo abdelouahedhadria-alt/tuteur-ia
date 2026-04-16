@@ -48,7 +48,7 @@ if st.button("🚀 Résoudre avec mon cours"):
             
             # ---> LE CODE ANTI-ERREUR EST ICI <---
             # On demande à Google la liste des modèles exacts autorisés pour votre clé
-            model_name = "gemini-1.5-flash" # Sécurité par défaut
+            model_name = "gemini-2.0-flash" # Sécurité par défaut
             for m in genai.list_models():
                 if 'generateContent' in m.supported_generation_methods:
                     if '1.5-flash' in m.name:
