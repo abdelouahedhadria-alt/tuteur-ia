@@ -46,16 +46,22 @@ if st.button("🚀 Résoudre avec mon cours"):
         try:
             genai.configure(api_key=api_key)
             
-            # ---> LE CODE ANTI-ERREUR EST ICI <---
-            # On demande à Google la liste des modèles exacts autorisés pour votre clé
-            model_name = "gemini-2.0-flash" # Sécurité par défaut
+            # ---> LE DÉTECTEUR 100% INTELLIGENT <---
+            model_name = None
+            # On demande à Google tous ses modèles actuels
             for m in genai.list_models():
                 if 'generateContent' in m.supported_generation_methods:
-                    if '1.5-flash' in m.name:
+                    # On prend simplement le premier modèle "flash" (le plus rapide) qu'il possède
+                    if 'flash' in m.name.lower():
+                        model_name = m.name
+                        break 
+            
+            # Si vraiment aucun flash n'est trouvé, on prend le premier modèle génératif disponible
+            if not model_name:
+                for m in genai.list_models():
+                    if 'generateContent' in m.supported_generation_methods:
                         model_name = m.name
                         break
-                    elif '1.5-pro' in m.name:
-                        model_name = m.name
                         
             model = genai.GenerativeModel(model_name)
             
@@ -78,7 +84,7 @@ if st.button("🚀 Résoudre avec mon cours"):
             if exercise_image:
                 inputs.append(Image.open(exercise_image))
             
-            with st.spinner(f"Analyse en cours avec le modèle autorisé..."):
+            with st.spinner(f"Analyse en cours avec le modèle {model_name}..."):
                 response = model.generate_content(inputs)
                 st.markdown("---")
                 st.markdown("### ✅ Solution proposée :")
@@ -88,4 +94,4 @@ if st.button("🚀 Résoudre avec mon cours"):
             st.error(f"Erreur technique détaillée : {e}")
 
 st.markdown("---")
-st.caption("Projet créé pour les étudiants de tous les niveaux scolaires.")
+st.caption("Projet créé pour tous les niveaux scolaires.")
