@@ -46,7 +46,7 @@ if st.button("🚀 Résoudre avec mon cours"):
     else:
         try:
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-2,5-flash')
+            model = genai.GenerativeModel('gemini-2,0-flash')
             
             # Préparation du prompt (les instructions pour l'IA)
             prompt = f"""
